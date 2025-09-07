@@ -1,5 +1,5 @@
 from pathlib import Path
-from pipeline.config import AUDIO_URL
+from data_ingestion.config import AUDIO_URL
 
 class DataLoader:
     """
