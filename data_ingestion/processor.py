@@ -46,7 +46,7 @@ class Processor:
         """
         object = {}
         for i in range(len(list)):
-            object[f"file_{i}"] = self.get_metadata(list[i])
+            object[f"{i}"] = self.get_metadata(list[i])
 
 
         data = json.dumps(object, indent=4)

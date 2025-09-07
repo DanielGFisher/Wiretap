@@ -31,6 +31,7 @@ if __name__ == "__main__":
         }
     }})
 
-    p.generate_file_hash(r"C:\\Users\\danie\\Downloads\\podcasts-20250907T074751Z-1-001\\podcasts\\download.wav")
 
+    p.generate_file_hash(r"C:\\Users\\danie\\Downloads\\podcasts-20250907T074751Z-1-001\\podcasts\\download.wav")
+    print(p.data[0])
     print(p.data)
