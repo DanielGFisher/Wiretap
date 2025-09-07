@@ -48,6 +48,7 @@ class KafkaConsumerClient:
         self.consumer.close()
 
 
+# Test Usage
 if __name__ == "__main__":
     kafka_consumer = KafkaConsumerClient("Audio-JSON")
     kafka_consumer.consume_loop()

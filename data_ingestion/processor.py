@@ -54,6 +54,7 @@ class Processor:
         return data
 
 
+# Test Usage
 if __name__ == "__main__":
     dl = DataLoader()
 
@@ -65,7 +66,5 @@ if __name__ == "__main__":
     if metadata:
         for key, value in metadata.items():
             print(f"{key}: {value}")
-
-
 
     print(p.data)
