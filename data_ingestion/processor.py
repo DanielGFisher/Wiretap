@@ -2,7 +2,7 @@ import json
 from operator import index
 from pathlib import Path
 import wave
-from pipeline.load_data import DataLoader
+from data_ingestion.load_data import DataLoader
 
 
 class Processor:
