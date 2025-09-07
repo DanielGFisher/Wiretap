@@ -20,6 +20,8 @@ class DataLoader:
             wav_files.append(file_path.resolve())
         return wav_files
 
+
+# Test Usage
 if __name__ == "__main__":
     dl = DataLoader()
     print(dl.wav_files)
