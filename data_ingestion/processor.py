@@ -1,13 +1,40 @@
 import json
 from pathlib import Path
 import wave
+import speech_recognition as sr
 from data_ingestion.load_data import DataLoader
 
 
 class Processor:
-    def __init__(self, link_list):
-        self.data = self.create_json_object(link_list)
+    def __init__(self):
+        self.data = []
+        self.recognizer = sr.Recognizer()
 
+
+    def get_text_from_wav(self,path):
+        """
+        Extract the text from the WAV file
+        :param path: path to WAV file
+        :return: Text from WAV file
+        """
+        with sr.AudioFile(path) as source:
+            audio_data = self.recognizer.record(source)
+
+            try:
+                text = self.recognizer.recognize_google(audio_data)
+                return text
+            except sr.UnknownValueError:
+                print("Google Speech Recognition could not understand audio")
+            except sr.RequestError as e:
+                print(f"Could not request results from Google Speech Recognition service; {e}")
+
+
+    def get_wav_creation_date(self, path):
+        """
+        Extracts the date of creation from WAV file
+        :param path:
+        :return:
+        """
     def get_metadata(self, file_path: Path):
         """
         Extracts metadata from WAV files
@@ -21,8 +48,8 @@ class Processor:
         try:
             with wave.open(str(file_path), 'rb') as wf:
                 metadata = {
-                    "direct_link" : str(file_path),
                     "metadata" : {
+                        "text" : self.get_text_from_wav(str(file_path)),
                         "nchannels": wf.getnchannels(),
                         "sampwidth": wf.getsampwidth(),
                         "framerate": wf.getframerate(),
@@ -45,7 +72,7 @@ class Processor:
         """
 
         obj = {}
-        for i, file in range(len(list)):
+        for i, file in range(len(files)):
             obj[f"file_{i}"] = self.get_metadata(file)
 
 
