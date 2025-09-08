@@ -8,7 +8,7 @@ class DataLoader:
         folder_path (str): The path to the folder with the WAV files
     """
     def __init__(self, folder_path=None):
-        self.folder_path = Path(AUDIO_URL) or Path(folder_path)
+        self.folder_path = Path(folder_path) if folder_path else Path(AUDIO_URL)
         self.wav_files = self.extract_wav_files()
 
     def extract_wav_files(self):

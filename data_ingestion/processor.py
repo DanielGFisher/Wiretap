@@ -1,5 +1,4 @@
 import json
-from operator import index
 from pathlib import Path
 import wave
 from data_ingestion.load_data import DataLoader
@@ -39,17 +38,17 @@ class Processor:
             print(f"Error reading WAV file {file_path}: {e}")
             return None
 
-    def create_json_object(self, list: dict):
+    def create_json_object(self, files: list):
         """
         Creates a single JSON object to send with all the necessary data
         :return: JSON object full of Audio file links and metadata
         """
-        object = {}
-        for i in range(len(list)):
-            object[f"file_{i}"] = self.get_metadata(list[i])
+        obj = {}
+        for i, file in range(len(list)):
+            obj[f"file_{i}"] = self.get_metadata(file)
 
 
-        data = json.dumps(object, indent=4)
+        data = json.dumps(obj, indent=4)
 
         return data
 

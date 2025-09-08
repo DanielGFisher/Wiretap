@@ -1,7 +1,10 @@
+import os
 from confluent_kafka import Producer
+from data_ingestion.config import KAFKA_BOOTSTRAP
+
 
 class KafkaProducerClient:
-    def __init__(self, bootstrap_servers='localhost:9092'):
+    def __init__(self, bootstrap_servers=KAFKA_BOOTSTRAP):
         self.producer = Producer({'bootstrap.servers': bootstrap_servers})
 
     def delivery_report(self, err, msg):

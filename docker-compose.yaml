@@ -5,6 +5,9 @@ services:
     container_name: wiretap-app
     ports:
       - "8000:8000"
+    environment:
+      - AUDIO-URL=/app/data
+      - KAFKA-BOOTSTRAP=kafka:9092
     volumes:
       - ./data:/app/data
 
