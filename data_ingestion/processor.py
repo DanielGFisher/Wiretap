@@ -43,6 +43,7 @@ class Processor:
         Creates a single JSON object to send with all the necessary data
         :return: JSON object full of Audio file links and metadata
         """
+
         obj = {}
         for i, file in range(len(list)):
             obj[f"file_{i}"] = self.get_metadata(file)
