@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 import wave
 import speech_recognition as sr
+from datetime import datetime
 from data_ingestion.load_data import DataLoader
 
 
@@ -10,14 +11,28 @@ class Processor:
         self.data = []
         self.recognizer = sr.Recognizer()
 
+    def get_file_name(self, wav_file_path):
+        """
+        Extracts name from WAV file
+        :param wav_file_path: Path to WAV file
+        :return: Name of WAV file
+        """
+        try:
+            file_name = wav_file_path.name
+            return file_name
+        except FileNotFoundError:
+            print(f"Error: File not found at '{wav_file_path}'")
+        except Exception as e:
+            print(f"An error occurred: {e}")
 
-    def get_text_from_wav(self,path):
+
+    def get_text_from_wav(self,wav_file_path):
         """
         Extract the text from the WAV file
-        :param path: path to WAV file
+        :param wav_file_path: Path to WAV file
         :return: Text from WAV file
         """
-        with sr.AudioFile(path) as source:
+        with sr.AudioFile(str(wav_file_path)) as source:
             audio_data = self.recognizer.record(source)
 
             try:
@@ -28,56 +43,57 @@ class Processor:
             except sr.RequestError as e:
                 print(f"Could not request results from Google Speech Recognition service; {e}")
 
-
-    def get_wav_creation_date(self, path):
+    def get_file_size(self, wav_file_path):
         """
-        Extracts the date of creation from WAV file
-        :param path:
-        :return:
+        Extract the size of WAV file
+        :param wav_file_path: Path to WAV file
+        :return: Size of WAV file
         """
-    def get_metadata(self, file_path: Path):
-        """
-        Extracts metadata from WAV files
-        :param file_path: A Path object from pathlib that points to the WAV file
-        :return: Python dictionary containing metadata or none if error occurs
-        """
-        if not file_path.is_file() or file_path.suffix.lower() != '.wav':
-            print(f"Error: {file_path} is not a valid WAV file")
-            return None
 
         try:
-            with wave.open(str(file_path), 'rb') as wf:
-                metadata = {
-                    "metadata" : {
-                        "text" : self.get_text_from_wav(str(file_path)),
-                        "nchannels": wf.getnchannels(),
-                        "sampwidth": wf.getsampwidth(),
-                        "framerate": wf.getframerate(),
-                        "nframes": wf.getnframes(),
-                        "comptype": wf.getcomptype(),
-                        "compname": wf.getcompname(),
-                        "duration_seconds": wf.getnframes() / wf.getframerate() if wf.getframerate() > 0 else 0
-                    }
-                }
-                return metadata
+            file_info = wav_file_path.stat()
+            file_size_bytes = file_info.st_size
+            return file_size_bytes
+        except FileNotFoundError:
+            print(f"Error: The file '{wav_file_path}' was not found.")
+        except Exception as e:
+            print(f"An error occurred: {e}")
 
-        except wave.Error as e:
-            print(f"Error reading WAV file {file_path}: {e}")
-            return None
 
-    def create_json_object(self, files: list):
+    def get_file_creation_date(self, wav_file_path):
+        """
+        Extracts the date of creation from WAV file
+        :param wav_file_path: Path to WAV file
+        :return: Date of creation
+        """
+        try:
+            file_stats = wav_file_path.stat()
+            creation_timestamp = file_stats.st_ctime
+            creation_datetime = datetime.fromtimestamp(creation_timestamp)
+            return creation_datetime
+        except FileNotFoundError:
+            print(f"Error: File not found at '{wav_file_path}'")
+        except Exception as e:
+            print(f"An error occurred: {e}")
+
+
+    def create_json_object(self, file_path):
         """
         Creates a single JSON object to send with all the necessary data
         :return: JSON object full of Audio file links and metadata
         """
 
-        obj = {}
-        for i, file in range(len(files)):
-            obj[f"file_{i}"] = self.get_metadata(file)
+        data = {"wav_file_link": str(file_path),
+                "metadata": {
+                    "file_name": self.get_file_name(file_path),
+                    "date_of_creation": str(self.get_file_creation_date(file_path)),
+                    "size": self.get_file_size(file_path),
+                    "text": self.get_text_from_wav(file_path)
+                }
+            }
 
-
-        data = json.dumps(obj, indent=4)
-
+        data = json.dumps(data, indent=4)
+        self.data.append(data)
         return data
 
 
@@ -85,13 +101,6 @@ class Processor:
 if __name__ == "__main__":
     dl = DataLoader()
 
-    p = Processor(dl.wav_files)
+    p = Processor()
 
-    wav_file = Path(r"C:\Users\danie\Downloads\podcasts-20250907T074751Z-1-001\podcasts\download.wav")
-    metadata = p.get_metadata(wav_file)
-
-    if metadata:
-        for key, value in metadata.items():
-            print(f"{key}: {value}")
-
-    print(p.data)
+    print(p.create_json_object(dl.wav_files[0]))

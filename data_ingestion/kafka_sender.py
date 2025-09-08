@@ -1,4 +1,3 @@
-import os
 from confluent_kafka import Producer
 from data_ingestion.config import KAFKA_BOOTSTRAP
 
