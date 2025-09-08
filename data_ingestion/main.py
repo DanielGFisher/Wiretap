@@ -8,9 +8,7 @@ processor = Processor()
 
 kafka_producer = KafkaProducerClient()
 
-data = processor.data
-
 for file in data_loader.wav_files:
-    processor.create_json_object(file)
+    data = processor.create_json_object(file)
+    kafka_producer.send("Audio-JSON", data)
 
-kafka_producer.send("Audio-JSON", data)

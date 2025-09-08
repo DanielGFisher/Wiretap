@@ -1,12 +1,13 @@
 from confluent_kafka import Consumer, KafkaError
 import threading
+import json
 import time
 
 class KafkaConsumerClient:
-    def __init__(self, topic, group_id='my-group', bootstrap_servers='localhost:9092', check_interval=2):
+    def __init__(self, topic, group_id="mongodb", bootstrap_servers='localhost:9092', check_interval=2):
         self.topic = topic
         self.bootstrap_servers = bootstrap_servers
-        self.group_id = group_id
+        self.group_id = group_id if group_id else "elastic"
         self.check_interval = check_interval
         self.running = True
 
@@ -15,6 +16,7 @@ class KafkaConsumerClient:
             'group.id': group_id,
             'auto.offset.reset': 'earliest'
         })
+        self.msgs = []
 
     def wait_for_topic(self):
         """Wait until the topic exists in Kafka before subscribing."""
@@ -38,7 +40,10 @@ class KafkaConsumerClient:
                 if msg.error().code() != KafkaError._PARTITION_EOF:
                     print(f"Consumer error: {msg.error()}")
                 continue
+            json_data = json.loads(msg.value().decode('utf-8'))
             print(f"Received message: {msg.value().decode('utf-8')}")
+            self.msgs.append(json_data)
+
 
     def start(self):
         threading.Thread(target=self.consume_loop, daemon=True).start()
@@ -53,3 +58,5 @@ if __name__ == "__main__":
     kafka_consumer = KafkaConsumerClient("Audio-JSON")
     kafka_consumer.consume_loop()
     kafka_consumer.start()
+
+    print(kafka_consumer.msgs)
