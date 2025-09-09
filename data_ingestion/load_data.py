@@ -2,6 +2,7 @@ from pathlib import Path
 from data_ingestion.config import AUDIO_URL
 from utils.logger import Logger
 
+logger = Logger.get_logger()
 
 class DataLoader:
     """
@@ -12,7 +13,7 @@ class DataLoader:
     def __init__(self, folder_path=None):
         self.folder_path = Path(folder_path) if folder_path else Path(AUDIO_URL)
         self.wav_files = self.extract_wav_files()
-        self.logger = Logger.get_logger()
+
 
     def extract_wav_files(self):
         """
@@ -21,7 +22,7 @@ class DataLoader:
         wav_files = []
         for file_path in self.folder_path.glob("*.wav"):
             wav_files.append(file_path.resolve())
-        self.logger.info("Extracted file paths from folder")
+        logger.info("Extracted file paths from folder")
         return wav_files
 
 

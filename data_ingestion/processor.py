@@ -4,6 +4,8 @@ from datetime import datetime
 from data_ingestion.load_data import DataLoader
 from utils.logger import Logger
 
+logger = Logger.get_logger()
+
 
 class Processor:
     def __init__(self):
@@ -18,12 +20,12 @@ class Processor:
         """
         try:
             file_name = wav_file_path.name
-            self.logger.info(f"The name {file_name} was extracted from {wav_file_path}")
+            logger.info(f"The name {file_name} was extracted from {wav_file_path}")
             return file_name
         except FileNotFoundError:
-            self.logger.error(f"Error: File not found at '{wav_file_path}'")
+            logger.error(f"Error: File not found at '{wav_file_path}'")
         except Exception as e:
-            self.logger.error(f"An error occurred: {e}")
+            logger.error(f"An error occurred: {e}")
 
 
     def get_text_from_wav(self,wav_file_path):
@@ -37,12 +39,12 @@ class Processor:
 
             try:
                 text = self.recognizer.recognize_google(audio_data)
-                self.logger.info(f"Text extracted from WAV file")
+                logger.info(f"Text extracted from WAV file")
                 return text
             except sr.UnknownValueError:
-                self.logger.error("Google Speech Recognition could not understand audio")
+                logger.error("Google Speech Recognition could not understand audio")
             except sr.RequestError as e:
-                self.logger.error(f"Could not request results from Google Speech Recognition service; {e}")
+                logger.error(f"Could not request results from Google Speech Recognition service; {e}")
 
     def get_file_size(self, wav_file_path):
         """
@@ -54,12 +56,12 @@ class Processor:
         try:
             file_info = wav_file_path.stat()
             file_size_bytes = file_info.st_size
-            self.logger.info(f"Extracted file size from {wav_file_path}")
+            logger.info(f"Extracted file size from {wav_file_path}")
             return file_size_bytes
         except FileNotFoundError:
-            self.logger.error(f"Error: The file '{wav_file_path}' was not found.")
+            logger.error(f"Error: The file '{wav_file_path}' was not found.")
         except Exception as e:
-            self.logger.error(f"An error occurred: {e}")
+            logger.error(f"An error occurred: {e}")
 
 
     def get_file_creation_date(self, wav_file_path):
@@ -72,12 +74,12 @@ class Processor:
             file_stats = wav_file_path.stat()
             creation_timestamp = file_stats.st_ctime
             creation_datetime = datetime.fromtimestamp(creation_timestamp)
-            self.logger.info(f"Extracted date {creation_datetime} from {wav_file_path} WAV file")
+            logger.info(f"Extracted date {creation_datetime} from {wav_file_path} WAV file")
             return creation_datetime
         except FileNotFoundError:
-            self.logger.error(f"Error: File not found at '{wav_file_path}'")
+            logger.error(f"Error: File not found at '{wav_file_path}'")
         except Exception as e:
-            self.logger.error(f"An error occurred: {e}")
+            logger.error(f"An error occurred: {e}")
 
 
     def create_json_object(self, file_path):
@@ -96,7 +98,7 @@ class Processor:
             }
 
         data = json.dumps(data, indent=4)
-        self.logger.info(f"Extracted {data} from {file_path} WAV file")
+        logger.info(f"Extracted {data} from {file_path} WAV file")
         return data
 
 
