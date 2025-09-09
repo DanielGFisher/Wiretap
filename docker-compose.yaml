@@ -1,15 +1,42 @@
 version: '3.8'
 services:
-  app:
-    build: .
-    container_name: wiretap-app
-    ports:
-      - "8000:8000"
+  producer:
+    build: ./data_ingestion
+    container_name: wiretap-producer
     environment:
       - AUDIO-URL=/app/data
       - KAFKA-BOOTSTRAP=kafka:9092
     volumes:
       - ./data:/app/data
+    depends_on:
+      - kafka
+
+  consumer:
+    build: ./data_transfer
+    container_name: wiretap-consumer
+    environment:
+      - KAFKA_BOOTSTRAP=kafka:9092
+      - MONGO_URI=mongodb://mongo:27017
+      - MONGO_DB=audio_db
+      - MONGO_COLLECTION=files
+      - ES_HOST=http://elasticsearch:9200
+      - ES_INDEX=audio_logs
+    volumes:
+      - ./data:/app/data
+    depends_on:
+      - kafka
+      - mongo
+      - elasticsearch
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - elk_and_mongo_network
 
   kafka:
     image: bitnami/kafka:latest
@@ -27,5 +54,38 @@ services:
     volumes:
       - kafka_data:/bitnami/kafka/data
 
-volumes:
-  kafka_data:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.2
+    container_name: elasticsearch
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    networks:
+      - elk-and-mongo-network
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.13.2
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
+    networks:
+      - elk-and-mongo-network
+
+  volumes:
+    kafka_data:
+    mongo_data:
+    es_data:
+
+  networks:
+    elk_and_mongo_network:
+      driver: bridge

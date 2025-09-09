@@ -14,5 +14,5 @@ COPY ../utils /app/utils
 # Mount data folder into container
 VOLUME ["/data"]
 
-# Default command to run data_ingestion
+# Default command to run data_transfer
 CMD ["python", "main.py"]
