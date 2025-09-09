@@ -1,6 +1,4 @@
 from elasticsearch import Elasticsearch
-from elasticsearch.helpers import bulk
-
 
 class ElasticService:
     def __init__(self, es_client = None, index = "audio-index"):

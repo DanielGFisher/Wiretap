@@ -1,5 +1,5 @@
 from confluent_kafka import Producer
-from data_ingestion.config import KAFKA_BOOTSTRAP
+from utils.config import KAFKA_BOOTSTRAP
 
 
 class KafkaProducerClient:
