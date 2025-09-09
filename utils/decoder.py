@@ -13,7 +13,7 @@ class Decoder:
         :return : The decoded string
         """
         if not isinstance(encoded_string, str):
-            raise TypeError("Input must be a string.")
+            self.logger.error("Input must be a string!")
 
         try:
             base64_bytes = encoded_string.encode("utf-8")
