@@ -1,7 +1,7 @@
 import json
 import speech_recognition as sr
 from datetime import datetime
-from data_ingestion.load_data import DataLoader
+from utils.load_data import DataLoader
 from utils.logger import Logger
 
 

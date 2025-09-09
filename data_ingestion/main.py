@@ -1,5 +1,5 @@
 from processor import Processor
-from load_data import DataLoader
+from utils.load_data import DataLoader
 from kafka_sender import KafkaProducerClient
 
 if __name__ == "__main__":

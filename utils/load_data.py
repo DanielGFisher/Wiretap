@@ -22,11 +22,24 @@ class DataLoader:
         wav_files = []
         for file_path in self.folder_path.glob("*.wav"):
             wav_files.append(file_path.resolve())
-        self.logger.info("Extracted file paths from folder")
-        return wav_files
+            return wav_files
+
+
+    def extract_from_txt_file(self, path):
+        try:
+            with open(path, "r") as file_object:
+                content = file_object.read()
+                print(content)
+        except FileNotFoundError:
+            self.logger.error(f"Error: The file {path} was not found.")
+        except Exception as e:
+            self.logger.error(f"An error occurred: {e}")
+
 
 
 # Test Usage
 if __name__ == "__main__":
     dl = DataLoader()
     print(dl.wav_files)
+    print()
+    print(dl.extract_from_txt_file(r"C:\Users\danie\PycharmProjectsc\Wiretap\data\negative_keywords_encoded.txt"))
