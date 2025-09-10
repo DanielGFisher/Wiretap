@@ -11,7 +11,7 @@ The project is split into two parts as follows;
 
 This phase handles the loading of the WAV file paths from a local folder, before going through a process
 of getting the file name, date of creation, size and extracts the text from the audio file and creates a JSON
-object with all the aforementioned processes.
+object with all the aforementioned processes. It also handles the sentiment and BDS processing.
 
 ### Build:
 
@@ -48,19 +48,26 @@ alongside the config file which holds the proper environment structure for the a
 
 ### Build:
 
-└── utils
+└── utils 
     ├── config.py - Holds env structure
-    └── logger.py - Tool to log events (uses: error, info)
-
+    ├── logger.py - Tool to log events (uses: error, info)
+    ├── decoder.py - Decodes encoded strings
+    ├── load_data.py - Loads data from folder
+    └── text_file_manager.py - Manages communication with text files
 
 # Full build:
 
 .
-├── README.md - You are here!
+├── README.md
+├── commands.bat
+├── data
+│ ├── negative_keywords.txt
+│ ├── negative_keywords_encoded.txt
+│ ├── neutral_keywords.txt
+│ └── neutral_keywords_encoded.txt
 ├── data_ingestion
 │ ├── Dockerfile
 │ ├── kafka_sender.py
-│ ├── load_data.py
 │ ├── main.py
 │ ├── processor.py
 │ └── requirements.txt
@@ -75,4 +82,9 @@ alongside the config file which holds the proper environment structure for the a
 ├── docker-compose.yaml
 └── utils
     ├── config.py
-    └── logger.py
+    ├── decoder.py
+    ├── load_data.py
+    ├── logger.py
+    ├── test.py
+    └── text_file_manager.py
+

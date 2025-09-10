@@ -59,10 +59,10 @@ class Processor:
         hostile_count = sum(text_lower.count(w) for w in self.neutral_words)
         neutral_count = sum(text_lower.count(w) for w in self.hostile_words)
         bds_percent = (hostile_count + neutral_count) / total_words * 100
-        is_bds = bds_percent > 2
-        if bds_percent <= 2:
+        is_bds = bds_percent > 5
+        if bds_percent <= 5:
             bds_threat_level = "None"
-        elif 2 < bds_percent >= 5:
+        elif 5 < bds_percent <= 10:
             bds_threat_level = "Neutral"
         else:
             bds_threat_level = "Hostile"
