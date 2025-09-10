@@ -14,6 +14,7 @@ of getting the file name, date of creation, size and extracts the text from the 
 object with all the aforementioned processes. It also handles the sentiment and BDS processing.
 
 ### Build:
+```bach
 
 ├── data_ingestion
 │ ├── Dockerfile - Containerizes application
@@ -23,7 +24,7 @@ object with all the aforementioned processes. It also handles the sentiment and 
 │ ├── main.py - Runs the program
 │ ├── processor.py - Deals with processing the files into a JSON object
 │ └── requirements.txt - Holds requirements for dockerization
-
+```
 
 ## Data Transfer
 
@@ -31,7 +32,7 @@ This phase receives the data and process it with a hash before storing in an Ela
 and MongoDB collection. It utilises Mongo and Elastic services and a hasher service to in order to properly send
 
 ### Build:
-
+```bach
 ├── data_transfer
 │ ├── Dockerfile - Containerizes application
 │ ├── elastic_service.py - Elastic Service that uses CRUD model create and update
@@ -40,13 +41,14 @@ and MongoDB collection. It utilises Mongo and Elastic services and a hasher serv
 │ ├── main.py - Runs the program
 │ ├── mongo_service.py - Mongo Service that uses CRUD model create and update
 │ └── requirements.txt - Holds requirements for dockerization
-
+```
 ## Utils:
 
 This holds the Logger given in the side mission that sends to Elastic as well as displays on screen messages
 alongside the config file which holds the proper environment structure for the applications using os.
 
 ### Build:
+```bach
 
 └── utils 
     ├── config.py - Holds env structure
@@ -54,9 +56,11 @@ alongside the config file which holds the proper environment structure for the a
     ├── decoder.py - Decodes encoded strings
     ├── load_data.py - Loads data from folder
     └── text_file_manager.py - Manages communication with text files
+```
 
 # Full build:
 
+```bach
 .
 ├── README.md
 ├── commands.bat
@@ -87,4 +91,4 @@ alongside the config file which holds the proper environment structure for the a
     ├── logger.py
     ├── test.py
     └── text_file_manager.py
-
+```
