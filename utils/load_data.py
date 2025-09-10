@@ -22,7 +22,7 @@ class DataLoader:
         wav_files = []
         for file_path in self.folder_path.glob("*.wav"):
             wav_files.append(file_path.resolve())
-            return wav_files
+        return wav_files
 
 
 # Test Usage

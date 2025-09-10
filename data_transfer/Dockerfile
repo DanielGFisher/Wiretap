@@ -12,7 +12,7 @@ COPY . .
 COPY ../utils /app/utils
 
 # Mount data folder into container
-VOLUME ["/data"]
+VOLUME ["/app/data"]
 
 # Default command to run data_transfer
 CMD ["python", "main.py"]
