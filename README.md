@@ -92,3 +92,8 @@ alongside the config file which holds the proper environment structure for the a
     ├── test.py
     └── text_file_manager.py
 ```
+
+#Reasoning:
+I decided a lot of things here out of a feeling of pressure and the time crunch, my grasp on these technologies is not the strongest and I also had seperate duties (please reference my direct Superior Meir Libero for more information) which took my time and stole the attention away from this critical test.
+
+Realistically if I'd had more time the text manipulation, extraction and analysis would have been done seperately as an entirely seperate service in which Id manipulate Elasticsearches text manipulation in order to complete the job at hand. Sadly I was incapable of that and as such I had to do a rush job in order to present something that at least works to a degree.
