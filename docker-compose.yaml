@@ -10,6 +10,8 @@ services:
       - ./data:/app/data
     depends_on:
       - kafka
+    networks:
+      - elk_and_mongo_network
 
   consumer:
     build: ./data_transfer
@@ -20,13 +22,17 @@ services:
       - MONGO_DB=audio_db
       - MONGO_COLLECTION=files
       - ES_HOST=http://elasticsearch:9200
-      - ES_INDEX=audio_logs
+      - ES_INDEX=audio_index
+      - HOSTILE_WORDS=/app/data/negative_keywords.txt
+      - LESS_HOSTILE_WORDS=/app/data/neutral_keywords.txt
     volumes:
       - ./data:/app/data
     depends_on:
       - kafka
       - mongo
       - elasticsearch
+    networks:
+      - elk_and_mongo_network
 
   mongodb:
     image: mongo:latest
@@ -53,6 +59,8 @@ services:
       - KAFKA_LOG_DIRS=/bitnami/kafka/data
     volumes:
       - kafka_data:/bitnami/kafka/data
+    networks:
+      - elk_and_mongo_network
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.13.2
@@ -67,7 +75,7 @@ services:
     volumes:
       - es_data:/usr/share/elasticsearch/data
     networks:
-      - elk-and-mongo-network
+      - elk_and_mongo_network
 
   kibana:
     image: docker.elastic.co/kibana/kibana:8.13.2
@@ -79,7 +87,7 @@ services:
     depends_on:
       - elasticsearch
     networks:
-      - elk-and-mongo-network
+      - elk_and_mongo_network
 
   volumes:
     kafka_data:
